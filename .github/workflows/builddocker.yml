@@ -11,8 +11,6 @@ env:
   PACKAGE_REGISTRY: docker.pkg.github.com/nvick/actions-testing
 jobs:
   build:
-    env:
-      IMAGE_ID: $PACKAGE_REGISTRY/ruby-base
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -22,6 +20,7 @@ jobs:
     
     - name: Build Ruby Docker image
       run: |
+        IMAGE_ID=$PACKAGE_REGISTRY/ruby-base
         echo IMAGE_ID=$IMAGE_ID
 
         docker pull $IMAGE_ID:latest || true
@@ -30,7 +29,7 @@ jobs:
 
     - name: Push Ruby Image
       run: |
-        echo IMAGE_ID=$IMAGE_ID
+        echo $IMAGE_ID
         
         docker push $IMAGE_ID:$GITHUB_SHA
         docker push $IMAGE_ID:latest
