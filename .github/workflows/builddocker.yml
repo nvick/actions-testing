@@ -1,0 +1,36 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: 
+      - master
+    paths:
+      - 'docker/base/Dockerfile'
+
+env:
+  PACKAGE_REGISTRY: docker.pkg.github.com/nvick/actions-testing
+jobs:
+  build:
+    env:
+      IMAGE_ID: ${{ env.PACKAGE_REGISTRY }}/ruby-base
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Log into registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+    
+    - name: Build Ruby Docker image
+      run: |
+        echo IMAGE_ID=$IMAGE_ID
+
+        docker pull $IMAGE_ID:latest || true
+
+        docker build . --file docker/base/Dockerfile --cache-from $IMAGE_ID:latest --tag $IMAGE_ID:$GITHUB_SHA --tag $IMAGE_ID:latest
+
+    - name: Push Ruby Image
+      run: |
+        echo IMAGE_ID=$IMAGE_ID
+        
+        docker push $IMAGE_ID:$GITHUB_SHA
+        docker push $IMAGE_ID:latest
