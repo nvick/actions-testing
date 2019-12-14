@@ -13,12 +13,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - name: Git Checkout
+      uses: actions/checkout@v1
 
     - name: Log into registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
     
-    - name: Build Ruby Docker image
+    - name: Build & Push Base Image
       run: |
         IMAGE_ID=$PACKAGE_REGISTRY/ruby-base
         echo IMAGE_ID=$IMAGE_ID
@@ -26,10 +27,11 @@ jobs:
         docker pull $IMAGE_ID:latest || true
 
         docker build . --file docker/base/Dockerfile --cache-from $IMAGE_ID:latest --tag $IMAGE_ID:$GITHUB_SHA --tag $IMAGE_ID:latest
-
-    - name: Push Ruby Image
-      run: |
-        echo $IMAGE_ID
-        
         docker push $IMAGE_ID:$GITHUB_SHA
+
+    - name: Push Latest Image
+      run: |
+        IMAGE_ID=$PACKAGE_REGISTRY/ruby-base
+        echo IMAGE_ID=$IMAGE_ID
+
         docker push $IMAGE_ID:latest
