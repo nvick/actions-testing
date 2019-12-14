@@ -76,3 +76,5 @@ RUN if [ "$INSTALL_PG_CLIENT" = true ]; then \
     # Install the pgsql client
     apt-get install -y postgresql-client \
 ;fi
+
+#DONE
