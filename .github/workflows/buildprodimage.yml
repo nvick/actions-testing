@@ -1,0 +1,26 @@
+name: Production Image Workflow
+
+on:
+  push:
+    branches: 
+      - master
+  check_suite:
+    types: [completed]
+
+env:
+  IMAGE_NAME: ruby-prod
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Git Checkout
+      if: github.event.check_suite.conclusion == 'success'
+      uses: actions/checkout@v1
+
+    - name: Log into registry
+      if: success()
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+    - name: Build Production Image
+      run: docker build . --file docker/production/Dockerfile
