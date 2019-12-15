@@ -4,8 +4,6 @@ on:
   push:
     branches: 
       - master
-  check_suite:
-    types: [completed]
 
 env:
   IMAGE_NAME: ruby-prod
