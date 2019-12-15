@@ -13,13 +13,12 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.event.check_suite.conclusion == 'success'
     steps:
     - name: Git Checkout
-      if: github.event.check_suite.conclusion == 'success'
       uses: actions/checkout@v1
 
     - name: Log into registry
-      if: success()
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
     - name: Build Production Image
