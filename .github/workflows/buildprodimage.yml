@@ -4,6 +4,7 @@ on:
   push:
     branches: 
       - master
+  check_suite: [completed]
 
 env:
   IMAGE_NAME: ruby-prod
@@ -11,7 +12,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    #if: github.event.check_suite.conclusion == 'success'
+    if: github.event.check_suite.conclusion == 'success'
     steps:
     - name: Git Checkout
       uses: actions/checkout@v1
