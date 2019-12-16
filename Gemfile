@@ -18,6 +18,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rspec-rails', github: 'rspec/rspec-rails', ref: 'c11a1b6fff72c6c45c67727480d4558742eb292c'
+  gem 'rspec_junit_formatter'
   gem 'shoulda-matchers'
 end
 
