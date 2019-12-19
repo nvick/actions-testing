@@ -24,7 +24,7 @@ jobs:
 
         docker pull $IMAGE_ID:latest || true
 
-        docker build . --file docker/base/Dockerfile --target base --cache-from $IMAGE_ID:latest --tag $IMAGE_ID:$GITHUB_SHA --tag $IMAGE_ID:latest
+        docker build . --file docker/base/Dockerfile --cache-from $IMAGE_ID:latest --tag $IMAGE_ID:$GITHUB_SHA --tag $IMAGE_ID:latest
         docker push $IMAGE_ID:$GITHUB_SHA
 
     - name: Push Latest Base Image
@@ -40,7 +40,7 @@ jobs:
 
         docker pull $IMAGE_ID:latest || true
 
-        docker build . --file docker/base/Dockerfile --target development --cache-from $IMAGE_ID:latest --tag $IMAGE_ID:$GITHUB_SHA --tag $IMAGE_ID:latest
+        docker build . --file docker/base/dev-base/Dockerfile --cache-from $IMAGE_ID:latest --tag $IMAGE_ID:$GITHUB_SHA --tag $IMAGE_ID:latest
         docker push $IMAGE_ID:$GITHUB_SHA
 
     - name: Push Latest Dev Image

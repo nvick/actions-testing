@@ -1,6 +1,6 @@
 ARG RAILSDOCK_RUBY_VERSION=2.6.5
 
-FROM ruby:$RAILSDOCK_RUBY_VERSION as base
+FROM ruby:$RAILSDOCK_RUBY_VERSION
 
 LABEL maintainer="Nate Vick <nate.vick@hint.io>"
 
@@ -70,15 +70,3 @@ RUN if [ "$INSTALL_PG_CLIENT" = true ]; then \
     apt-get install -y postgresql-client \
 ;fi
 
-FROM docker.pkg.github.com/nvick/actions-testing/ruby-dev as development
-
-##############################################################################
-# Install Watchman
-##############################################################################
-
-RUN git clone https://github.com/facebook/watchman.git -b v4.9.0 --depth 1 && \
-  cd watchman && \
-  ./autogen.sh && \
-  ./configure --without-python  --without-pcre --enable-lenient && \
-  make && \
-  make install
