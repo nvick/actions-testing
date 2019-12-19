@@ -4,6 +4,8 @@ on:
   push:
     branches: 
       - master
+    paths:
+      - 'docker/base/**'
 
 env:
   PACKAGE_REGISTRY: docker.pkg.github.com/nvick/actions-testing
