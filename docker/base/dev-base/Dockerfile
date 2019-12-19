@@ -1,3 +1,4 @@
+ARG IMAGE_TAG
 
 FROM docker.pkg.github.com/nvick/actions-testing/ruby-base
 
