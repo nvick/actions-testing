@@ -26,7 +26,7 @@ jobs:
 
         docker build . --file docker/base/Dockerfile --target base --cache-from $IMAGE_ID:latest --tag $IMAGE_ID:$GITHUB_SHA --tag $IMAGE_ID:latest
         docker push $IMAGE_ID:$GITHUB_SHA
-        docker build . --file docker/base/Dockerfile
+        docker build . --file docker/base/Dockerfile --target development
 
     - name: Push Latest Base Image
       run: |
