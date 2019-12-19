@@ -1,6 +1,6 @@
 ARG IMAGE_TAG
 
-FROM docker.pkg.github.com/nvick/actions-testing/ruby-base
+FROM docker.pkg.github.com/nvick/actions-testing/ruby-base:$IMAGE_TAG
 
 ##############################################################################
 # Install Watchman
