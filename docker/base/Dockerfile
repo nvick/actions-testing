@@ -1,6 +1,6 @@
 ARG RAILSDOCK_RUBY_VERSION=2.6.5
 
-FROM ruby:$RAILSDOCK_RUBY_VERSION
+FROM ruby:$RAILSDOCK_RUBY_VERSION as base
 
 LABEL maintainer="Nate Vick <nate.vick@hint.io>"
 
@@ -29,13 +29,6 @@ RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     libtesseract-dev \
     ghostscript
-
-RUN git clone https://github.com/facebook/watchman.git -b v4.9.0 --depth 1 && \
-  cd watchman && \
-  ./autogen.sh && \
-  ./configure --without-python  --without-pcre --enable-lenient && \
-  make && \
-  make install
 
 ###############################################################################
 # Ruby, Rubygems, and Bundler Defaults
@@ -77,4 +70,15 @@ RUN if [ "$INSTALL_PG_CLIENT" = true ]; then \
     apt-get install -y postgresql-client \
 ;fi
 
-#Dev and Prod build from here
+FROM base as development
+
+##############################################################################
+# Install Watchman
+##############################################################################
+
+RUN git clone https://github.com/facebook/watchman.git -b v4.9.0 --depth 1 && \
+  cd watchman && \
+  ./autogen.sh && \
+  ./configure --without-python  --without-pcre --enable-lenient && \
+  make && \
+  make install
