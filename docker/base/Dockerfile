@@ -70,7 +70,7 @@ RUN if [ "$INSTALL_PG_CLIENT" = true ]; then \
     apt-get install -y postgresql-client \
 ;fi
 
-FROM base as development
+FROM docker.pkg.github.com/nvick/actions-testing/ruby-dev as development
 
 ##############################################################################
 # Install Watchman

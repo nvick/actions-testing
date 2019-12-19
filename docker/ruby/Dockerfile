@@ -1,4 +1,4 @@
-FROM docker.pkg.github.com/nvick/actions-testing/ruby-base
+FROM docker.pkg.github.com/nvick/actions-testing/ruby-dev
 
 ###############################################################################
 # Railsdock non-root user

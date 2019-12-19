@@ -26,11 +26,26 @@ jobs:
 
         docker build . --file docker/base/Dockerfile --target base --cache-from $IMAGE_ID:latest --tag $IMAGE_ID:$GITHUB_SHA --tag $IMAGE_ID:latest
         docker push $IMAGE_ID:$GITHUB_SHA
-        docker build . --file docker/base/Dockerfile --target development
 
     - name: Push Latest Base Image
       run: |
         IMAGE_ID=$PACKAGE_REGISTRY/ruby-base
+        echo IMAGE_ID=$IMAGE_ID
+
+        docker push $IMAGE_ID:latest
+    - name: Build & Push Dev Image
+      run: |
+        IMAGE_ID=$PACKAGE_REGISTRY/ruby-dev
+        echo IMAGE_ID=$IMAGE_ID
+
+        docker pull $IMAGE_ID:latest || true
+
+        docker build . --file docker/base/Dockerfile --target development --cache-from $IMAGE_ID:latest --tag $IMAGE_ID:$GITHUB_SHA --tag $IMAGE_ID:latest
+        docker push $IMAGE_ID:$GITHUB_SHA
+
+    - name: Push Latest Dev Image
+      run: |
+        IMAGE_ID=$PACKAGE_REGISTRY/ruby-dev
         echo IMAGE_ID=$IMAGE_ID
 
         docker push $IMAGE_ID:latest
