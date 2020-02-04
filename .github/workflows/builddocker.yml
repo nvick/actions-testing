@@ -50,16 +50,3 @@ jobs:
     - name: Push Latest Dev Image
       run: |
         docker push ${{ steps.build-dev.outputs.image }}:latest
-        
-  build-rails-prod:
-    runs-on: ubuntu-latest
-    needs: build-base
-    steps:
-    - name: Git Checkout
-      uses: actions/checkout@v2
-
-    - name: Log into registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-
-    - name: Build Production Image
-      run: docker build . --file docker/production/Dockerfile
