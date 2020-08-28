@@ -9,7 +9,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: circleci/ruby:2.6.5-node-browsers
+    container: hintmedia/github-action-ruby:2.2.3
     services:
       postgres:
         image: postgres:12.3
