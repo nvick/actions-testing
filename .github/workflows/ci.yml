@@ -36,6 +36,18 @@ jobs:
     - name: RubyGems Update
       run: gem update --system
 
+    - name: Gems Cache
+      id: gem-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gem-
+
+    - name: Bundle Install
+      run: bundle check || bundle install --path vendor/bundle --jobs 4 --retry 3
+
     - name: Get Yarn Cache
       id: yarn-cache
       run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -48,18 +60,6 @@ jobs:
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
-
-    - name: Gems Cache
-      id: gem-cache
-      uses: actions/cache@v2
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-gem-
-
-    - name: Bundle Install
-      run: bundle check || bundle install --path vendor/bundle --jobs 4 --retry 3
 
     - name: Yarn Install
       run: yarn check || bin/rails yarn:install
