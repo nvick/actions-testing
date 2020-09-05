@@ -42,7 +42,7 @@ jobs:
 
     - name: Node Modules Cache
       id: node-modules-cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ${{ steps.yarn-cache.outputs.dir }}
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
@@ -51,7 +51,7 @@ jobs:
 
     - name: Gems Cache
       id: gem-cache
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
