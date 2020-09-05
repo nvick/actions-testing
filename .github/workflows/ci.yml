@@ -2,11 +2,9 @@ name: Run Tests
 on: [push]
 
 env:
-  CC_TEST_REPORTER_ID: ${{ secrets.CC_REPORTER_ID }}
   DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
   RAILS_ENV: test
   RACK_ENV: test
-  SELECTIVE_API_KEY: ${{ secrets.SELECTIVE_API_KEY }}
 
 jobs:
   test:
