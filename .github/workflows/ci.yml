@@ -6,10 +6,6 @@ env:
   RAILS_ENV: test
   RACK_ENV: test
 
-defaults:
-  run:
-    working-directory: actions-test
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -32,7 +28,7 @@ jobs:
 
     - name: No Docs
       run: "echo 'gem: --no-document' >> ~/.gemrc"
-    
+
     - run: pwd
 
     - uses: ruby/setup-ruby@v1
