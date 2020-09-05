@@ -1,18 +1,19 @@
-name: CI
+name: Run Tests
 on: [push]
 
 env:
+  CC_TEST_REPORTER_ID: ${{ secrets.CC_REPORTER_ID }}
   DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
   RAILS_ENV: test
   RACK_ENV: test
+  SELECTIVE_API_KEY: ${{ secrets.SELECTIVE_API_KEY }}
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: hintmedia/github-action-ruby:2.2.3
     services:
       postgres:
-        image: postgres:12.3
+        image: postgres:12
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -27,6 +28,29 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: No Docs
+      run: "echo 'gem: --no-document' >> ~/.gemrc"
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.6.5
+
+    - name: RubyGems Update
+      run: gem update --system
+
+    - name: Get Yarn Cache
+      id: yarn-cache
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Node Modules Cache
+      id: node-modules-cache
+      uses: actions/cache@v1
+      with:
+        path: ${{ steps.yarn-cache.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
     - name: Gems Cache
       id: gem-cache
       uses: actions/cache@v1
@@ -39,10 +63,13 @@ jobs:
     - name: Bundle Install
       run: bundle check || bundle install --path vendor/bundle --jobs 4 --retry 3
 
+    - name: Yarn Install
+      run: yarn check || bin/rails yarn:install
+
     - name: Prepare DB
       run: bundle exec rails db:schema:load --trace
 
-    - name: RSpec Suite
+    - name: RSpec and Report Coverage
       run: |
         bundle exec rspec --format progress \
                           --format RspecJunitFormatter \
