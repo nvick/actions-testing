@@ -37,6 +37,11 @@ jobs:
 
     - name: RubyGems Update
       run: gem update --system
+    
+    - name: Set ENV for CodeClimate
+      run: |
+        echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+        echo $BRANCH_NAME
 
     - name: Gems Cache
       id: gem-cache
