@@ -41,7 +41,6 @@ jobs:
     - name: Set ENV for CodeClimate
       run: |
         echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
-        echo $BRANCH_NAME
 
     - name: Gems Cache
       id: gem-cache
@@ -54,6 +53,7 @@ jobs:
 
     - name: Bundle Install
       run: |
+        echo $BRANCH_NAME
         bundle config set path vendor/bundle
         bundle install --jobs 4 --retry 3
         bundle config list
